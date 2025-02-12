@@ -72,8 +72,8 @@ def get_instruction(instance: pd.Series, metadata: EvalMetadata):
         f'{instance.problem_statement}\n'
         '</issue_description>\n\n'
         'Can you help me implement the necessary changes to the repository to test whether the issue in <issue_description> was resolved?\n'
-        "I've already taken care of all changes to any of the non-test files. This means you DON'T have to modify the actual logic and ONLY have to update test logic and tests!\n"
-        'Your task is to make the minimal changes to tests files in the /workspace directory to reproduce the issue in the <issue_description>, i.e. such that the generated tests fail when the issue is unresolved and pass when the issue is resolved.\n'
+        "I will take care of all changes to any of the non-test files. This means you DON'T have to modify the actual logic and ONLY have to update test logic and tests!\n"
+        'Your task is to make the minimal changes to tests files in the /workspace directory to reproduce the issue in the <issue_description>, i.e. such that the generated tests fail in the current state (where the issue is unresolved) and pass when the issue will be resolved.\n'
         'Follow these steps to reproduce the issue:\n'
         '1. As a first step, it might be a good idea to explore the repo to familiarize yourself with its structure.\n'
         '2. Create a script to reproduce the error and execute it with `python <filename.py>` using the BashTool, to confirm the error\n'
