@@ -17,5 +17,10 @@ instance = sorted(os.listdir(prediction_dir))[-1]
 with open(os.path.join(prediction_dir, instance)) as f:
     res = json.load(f)
 for message in res["messages"]:
-    print(res)
+    for content in message["content"]:
+        if content["type"] == "text":
+            print(content["text"])
+        else:
+            print("unknown content type")
+            print(content)
     input()
