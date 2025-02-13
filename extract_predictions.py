@@ -17,11 +17,11 @@ with open(prediction_dir) as f:
     for line in f:
         pred = json.loads(line)
         git_diff = pred["test_result"]["git_patch"]
-        try:
-            patchset = PatchSet(git_diff)
-        except:
-            _LOGGER.warning("No git diff found for instance %s", pred["instance_id"])
-            continue
+        # try:
+        #     patchset = PatchSet(git_diff)
+        # except:
+        #     _LOGGER.warning("No git diff found for instance %s", pred["instance_id"])
+        #     continue
         try:
             print(json.dumps({
                 "instance_id": pred["instance_id"],
