@@ -20,14 +20,18 @@ for instance in os.listdir(prediction_dir):
     try:
         git_diff_start_line = next(i for i, l in enumerate(log) if "INFO - Got git diff for instance" in l)
     except StopIteration:
-        _LOGGER.warning("No git diff found for instance", instance)
+        _LOGGER.warning("No git diff found for instance %s", instance)
         continue
-    git_diff = "".join(log[git_diff_start_line+2:-1]).strip()
+    try:
+        git_end_line = next(i for i, l in enumerate(log[git_diff_start_line+2:]) if "--------" == l.strip())
+    except StopIteration:
+        git_end_line = -1
+    git_diff = "".join(log[git_diff_start_line+2:git_end_line]).strip()
     # check if diff is valid
     try:
         patchset = PatchSet(git_diff)
     except:
-        _LOGGER.warning("No git diff found for instance", instance, git_diff)
+        _LOGGER.warning("No git diff found for instance %s", instance)
         continue
     print(json.dumps({
         "instance_id": instance_name,
