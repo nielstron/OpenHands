@@ -20,7 +20,7 @@ with open(prediction_dir) as f:
             print(json.dumps({
                 "instance_id": pred["instance_id"],
                 "model_name_or_path": "OpenHands-Claude-Sonnet-3.5",
-                "model_patch": pred["test_result"]["git_diff"],
+                "model_patch": pred["test_result"]["git_patch"],
                 "full_output": json.dumps(pred),
             }))
         except KeyError:
