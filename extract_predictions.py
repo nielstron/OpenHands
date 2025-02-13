@@ -16,10 +16,13 @@ predictions = []
 with open(prediction_dir) as f:
     for line in f:
         pred = json.loads(line)
-        print(json.dumps({
-            "instance_id": pred["instance_id"],
-            "model_name_or_path": "OpenHands-Claude-Sonnet-3.5",
-            "model_patch": pred["test_result"]["git_diff"],
-            "full_output": json.dumps(pred),
-        }))
+        try:
+            print(json.dumps({
+                "instance_id": pred["instance_id"],
+                "model_name_or_path": "OpenHands-Claude-Sonnet-3.5",
+                "model_patch": pred["test_result"]["git_diff"],
+                "full_output": json.dumps(pred),
+            }))
+        except KeyError:
+            _LOGGER.warning("No git diff found for instance %s", pred["instance_id"])
 
