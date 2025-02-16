@@ -17,10 +17,15 @@ instance = sorted(os.listdir(prediction_dir))[-1]
 with open(os.path.join(prediction_dir, instance)) as f:
     res = json.load(f)
 for message in res["messages"]:
+    print("------------")
+    print(message["role"], ":")
+    print("------------")
     for content in message["content"]:
         if content["type"] == "text":
             print(content["text"])
         else:
             print("unknown content type")
             print(content)
+    for content in message.get("tool_calls",[]):
+        print(content)
     input()
