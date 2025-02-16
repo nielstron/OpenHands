@@ -374,7 +374,6 @@ def make_exec_spec(instance: SWEbenchInstance) -> ExecSpec:
     else:
         arch = "x86_64"
 
-    changed_files = extract_changed_files(instance["golden_code_patch"])
 
     return ExecSpec(
         instance_id=instance_id,
@@ -386,5 +385,5 @@ def make_exec_spec(instance: SWEbenchInstance) -> ExecSpec:
         arch=arch,
         test_directives=test_directives,
         patch_list=patch_list,
-        coverage_files=changed_files,
+        coverage_files=[],
     )
