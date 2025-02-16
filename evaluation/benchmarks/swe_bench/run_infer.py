@@ -9,6 +9,7 @@ import toml
 from datasets import load_dataset
 
 import openhands.agenthub
+from evaluation.benchmarks.swe_bench.constants import MAP_VERSION_TO_INSTALL, MAP_REPO_TO_INSTALL
 from evaluation.benchmarks.swe_bench.resource.mapping import (
     get_instance_resource_factor,
 )
@@ -305,6 +306,31 @@ def initialize_runtime(
         obs.exit_code == 0 and 'testbed' in obs.content,
         f'Expected to find python interpreter from testbed, but got: {str(obs)}',
     )
+
+    # set up repo
+    setup_commands = []
+    if instance["repo"] in MAP_REPO_TO_INSTALL:
+        setup_commands.append(MAP_REPO_TO_INSTALL[instance["repo"]])
+
+    # Run pre-install set up if provided
+    install = MAP_VERSION_TO_INSTALL.get(instance['repo'], {}).get(instance['version'], [])
+    if "pre_install" in install:
+        for pre_install in install["pre_install"]:
+            setup_commands.append(pre_install)
+
+    if "install" in install:
+        setup_commands.append(install["install"])
+
+    for command in setup_commands:
+        action = CmdRunAction(command=command)
+        action.set_hard_timeout(600)
+        logger.info(action, extra={'msg_type': 'ACTION'})
+        obs = runtime.run_action(action)
+        logger.info(obs, extra={'msg_type': 'OBSERVATION'})
+        assert_and_raise(
+            obs.exit_code == 0 and 'testbed' in obs.content,
+            f'Expected to find python interpreter from testbed, but got: {str(obs)}',
+            )
 
     logger.info('-' * 30)
     logger.info('END Runtime Initialization Fn')
