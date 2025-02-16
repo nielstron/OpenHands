@@ -80,8 +80,8 @@ def get_instruction(instance: pd.Series, metadata: EvalMetadata):
         '1. As a first step, it might be a good idea to explore the repo to familiarize yourself with its structure.\n'
         '2. Create a script to reproduce the error and execute it with `python <filename.py>` using the BashTool, to confirm the error\n'
         '3. Edit the sourcecode of the repo to integrate your reproduction script into the test framework\n'
-        '4. Run the test framework and make sure your tests fail! Only submit FAILING tests! Never submit a test that passes. The reported issue is still present in this repository.\n'
-        f"The following command can be used to run the tests: `{list(MAP_REPO_TO_TEST_FRAMEWORK_VERBOSE[instance.repo].values())[0]}`. Do not submit if the tests pass. Make sure they fail in the expected way.\n"
+        '4. Run the test framework and make sure your tests fail! Only submit FAILING tests! Never submit passing tests.\n'
+        f"The following command can be used to run the tests: `{list(MAP_REPO_TO_TEST_FRAMEWORK_VERBOSE[instance.repo].values())[0]}`. Make sure they fail in the expected way.\n"
         "Your thinking should be thorough and so it's fine if it's very long.\n"
     )
 
@@ -327,10 +327,6 @@ def initialize_runtime(
         logger.info(action, extra={'msg_type': 'ACTION'})
         obs = runtime.run_action(action)
         logger.info(obs, extra={'msg_type': 'OBSERVATION'})
-        assert_and_raise(
-            obs.exit_code == 0 and 'testbed' in obs.content,
-            f'Expected to find python interpreter from testbed, but got: {str(obs)}',
-            )
 
     logger.info('-' * 30)
     logger.info('END Runtime Initialization Fn')
